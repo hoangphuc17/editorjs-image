@@ -122,6 +122,7 @@ export default class ImageTool {
       buttonContent: config.buttonContent || '',
       uploader: config.uploader || undefined,
       actions: config.actions || [],
+      onSelectFile: config.onSelectFile,
     };
 
     /**
@@ -140,11 +141,15 @@ export default class ImageTool {
       api,
       config: this.config,
       onSelectFile: () => {
-        this.uploader.uploadSelectedFile({
-          onPreview: (src) => {
-            this.ui.showPreloader(src);
-          },
-        });
+        if (this.config.onSelectFile) {
+          this.config.onSelectFile(this);
+        } else {
+          this.uploader.uploadSelectedFile({
+            onPreview: (src) => {
+              this.ui.showPreloader(src);
+            },
+          });
+        }
       },
       readOnly,
     });
